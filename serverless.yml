@@ -25,17 +25,20 @@ provider:
 package:
   individually: true
   patterns:
-    - '!./**'
-    - 'src/**'
-    - 'requirements.txt'
+    - '!node_modules/**'
+    - '!venv/**'
 
 functions:
   register:
-    handler: src/handlers/auth/register.handler
+    handler: src/auth/register.handler
     package:
-      patterns:
-        - 'src/handlers/auth/register.py'
-        - 'src/shared/**'
+      include:
+        - src/auth/register.py
+        - src/shared/**
+      exclude:
+        - '**/__pycache__/**'
+        - '**/*.pyc'
+        - '**/*.pyo'
     events:
       - http:
           path: /auth/register
@@ -43,11 +46,15 @@ functions:
           cors: true
   
   login:
-    handler: src/handlers/auth/login.handler
+    handler: src/auth/login.handler
     package:
-      patterns:
-        - 'src/handlers/auth/login.py'
-        - 'src/shared/**'
+      include:
+        - src/auth/login.py
+        - src/shared/**
+      exclude:
+        - '**/__pycache__/**'
+        - '**/*.pyc'
+        - '**/*.pyo'
     events:
       - http:
           path: /auth/login
@@ -55,11 +62,15 @@ functions:
           cors: true
           
   forgotPassword:
-    handler: src/handlers/auth/forgot_password.handler
+    handler: src/auth/forgot_password.handler
     package:
-      patterns:
-        - 'src/handlers/auth/forgot_password.py'
-        - 'src/shared/**'
+      include:
+        - src/auth/forgot_password.py
+        - src/shared/**
+      exclude:
+        - '**/__pycache__/**'
+        - '**/*.pyc'
+        - '**/*.pyo'
     events:
       - http:
           path: /auth/forgot-password
@@ -92,9 +103,7 @@ plugins:
 
 custom:
   pythonRequirements:
-    layer:
-      name: python-deps
-      description: Python dependencies
+    layer: false
     noDeploy:
       - coverage
       - pytest
@@ -102,7 +111,7 @@ custom:
     useStaticCache: false
     dockerizePip: false
     zip: true
-    slim: false
+    slim: true
     strip: false
     nativeModules: false
-    pythonBin: python    # Changed from python3 to python for Windows compatibility
+    pythonBin: python

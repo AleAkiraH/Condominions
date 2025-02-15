@@ -31,8 +31,3 @@ Content-Type: application/json
 {
     "email": "user@example.com"
 }
-
-### Exemplo de chamada autenticada (para futuros endpoints)
-# @name exampleAuthenticatedCall
-GET {{baseUrl}}/some-protected-route
-Authorization: Bearer {{authToken}}
