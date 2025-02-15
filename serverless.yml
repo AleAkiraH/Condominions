@@ -25,20 +25,15 @@ provider:
 package:
   individually: true
   patterns:
-    - '!node_modules/**'
-    - '!venv/**'
+    - '!**/*'  # Exclui tudo por padrão
 
 functions:
   register:
     handler: src/auth/register.handler
     package:
-      include:
-        - src/auth/register.py
-        - src/shared/**
-      exclude:
-        - '**/__pycache__/**'
-        - '**/*.pyc'
-        - '**/*.pyo'
+      patterns:
+        - 'src/auth/register.py'  # Inclui apenas o arquivo do lambda
+        - 'src/shared/response.py'  # Inclui apenas o módulo compartilhado necessário
     events:
       - http:
           path: /auth/register
@@ -48,13 +43,9 @@ functions:
   login:
     handler: src/auth/login.handler
     package:
-      include:
-        - src/auth/login.py
-        - src/shared/**
-      exclude:
-        - '**/__pycache__/**'
-        - '**/*.pyc'
-        - '**/*.pyo'
+      patterns:
+        - 'src/auth/login.py'  # Inclui apenas o arquivo do lambda
+        - 'src/shared/response.py'  # Inclui apenas o módulo compartilhado necessário
     events:
       - http:
           path: /auth/login
@@ -64,13 +55,9 @@ functions:
   forgotPassword:
     handler: src/auth/forgot_password.handler
     package:
-      include:
-        - src/auth/forgot_password.py
-        - src/shared/**
-      exclude:
-        - '**/__pycache__/**'
-        - '**/*.pyc'
-        - '**/*.pyo'
+      patterns:
+        - 'src/auth/forgot_password.py'  # Inclui apenas o arquivo do lambda
+        - 'src/shared/response.py'  # Inclui apenas o módulo compartilhado necessário
     events:
       - http:
           path: /auth/forgot-password
