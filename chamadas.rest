@@ -1,0 +1,38 @@
+@baseUrl = {{$dotenv API_URL}}
+@authToken = {{login.response.body.token}}
+
+### Register
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "Senha@123",
+    "name": "Usuario Teste",
+    "phone": "+5511999999"
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "Senha@123"
+}
+
+### Forgot Password
+# @name forgotPassword
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "user@example.com"
+}
+
+### Exemplo de chamada autenticada (para futuros endpoints)
+# @name exampleAuthenticatedCall
+GET {{baseUrl}}/some-protected-route
+Authorization: Bearer {{authToken}}

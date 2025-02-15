@@ -4,6 +4,8 @@ provider:
   name: aws
   runtime: python3.9
   region: us-east-1
+  tags:
+    projeto: condominions
   environment:
     DYNAMODB_TABLE: condominions-users
     JWT_SECRET: "seu-secret-temporario-123"
@@ -20,9 +22,20 @@ provider:
         - ses:SendRawEmail
       Resource: "*"
 
+package:
+  individually: true
+  patterns:
+    - '!./**'
+    - 'src/**'
+    - 'requirements.txt'
+
 functions:
   register:
     handler: src/handlers/auth/register.handler
+    package:
+      patterns:
+        - 'src/handlers/auth/register.py'
+        - 'src/shared/**'
     events:
       - http:
           path: /auth/register
@@ -31,6 +44,10 @@ functions:
   
   login:
     handler: src/handlers/auth/login.handler
+    package:
+      patterns:
+        - 'src/handlers/auth/login.py'
+        - 'src/shared/**'
     events:
       - http:
           path: /auth/login
@@ -39,6 +56,10 @@ functions:
           
   forgotPassword:
     handler: src/handlers/auth/forgot_password.handler
+    package:
+      patterns:
+        - 'src/handlers/auth/forgot_password.py'
+        - 'src/shared/**'
     events:
       - http:
           path: /auth/forgot-password
@@ -62,6 +83,9 @@ resources:
           - AttributeName: sk
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+        Tags:
+          - Key: projeto
+            Value: condominions
 
 plugins:
   - serverless-python-requirements
@@ -75,5 +99,10 @@ custom:
       - coverage
       - pytest
     usePoetry: false
-    useStaticCache: true
-    dockerizePip: false  # Alterado de true para false
+    useStaticCache: false
+    dockerizePip: false
+    zip: true
+    slim: false
+    strip: false
+    nativeModules: false
+    pythonBin: python    # Changed from python3 to python for Windows compatibility
