@@ -1,0 +1,23 @@
+{
+  "name": "condominions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AleAkiraH/Condominions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AleAkiraH/Condominions/issues"
+  },
+  "homepage": "https://github.com/AleAkiraH/Condominions#readme",
+  "devDependencies": {
+    "serverless-python-requirements": "^6.1.2"
+  }
+}

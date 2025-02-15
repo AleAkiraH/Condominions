@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Serverless
+.serverless/
+node_modules/
+.env
+
+# Virtual Environment
+venv/
+ENV/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Coverage/Tests
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+.env.local
+.env*.local
+
+# Dependencies
+package-lock.json
+yarn.lock
+poetry.lock
+
+# Local AWS credentials
+.aws/
