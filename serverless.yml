@@ -76,6 +76,41 @@ functions:
     tags:
       projeto: condominions  # Tag específica para esta função
 
+  updateProfile:
+    handler: src/auth/update_profile.handler
+    events:
+      - http:
+          path: /auth/profile
+          method: put
+          cors: true
+          # Remover authorizer: true até implementarmos o autorizador
+
+  changePassword:
+    handler: src/auth/change_password.handler
+    events:
+      - http:
+          path: /auth/change-password
+          method: post
+          cors: true
+          # Remover authorizer: true até implementarmos o autorizador
+
+  resetPassword:
+    handler: src/auth/reset_password.handler
+    events:
+      - http:
+          path: /auth/reset-password
+          method: post
+          cors: true
+
+  logout:
+    handler: src/auth/logout.handler
+    events:
+      - http:
+          path: /auth/logout
+          method: post
+          cors: true
+          # Remover authorizer: true até implementarmos o autorizador
+
 resources:
   Resources:
     UsersTable:

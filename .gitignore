@@ -58,3 +58,4 @@ poetry.lock
 
 # Local AWS credentials
 .aws/
+.requirements.zip

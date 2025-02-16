@@ -10,7 +10,8 @@ Content-Type: application/json
     "email": "user@example.com",
     "password": "Senha@123",
     "name": "Usuario Teste",
-    "phone": "+5511999999"
+    "phone": "+5511999999",
+    "apartment_number": "42A"  # Novo campo adicionado
 }
 
 ### Login

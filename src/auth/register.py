@@ -2,6 +2,7 @@ import json
 import logging
 import boto3
 import bcrypt
+from datetime import datetime
 from src.shared.response import build_response
 
 # Configure logging
@@ -21,7 +22,7 @@ def handler(event, context):
         body = json.loads(event['body'])
         
         # Validate required fields
-        required_fields = ['email', 'password', 'name', 'phone']
+        required_fields = ['email', 'password', 'name', 'phone', 'apartment_number']
         for field in required_fields:
             if field not in body:
                 return build_response(400, {"message": f"Missing required field: {field}"})
@@ -30,6 +31,7 @@ def handler(event, context):
         password = body['password']
         name = body['name']
         phone = body['phone']
+        apartment_number = body['apartment_number']
 
         # Check if user already exists
         existing_user = table.get_item(
@@ -45,18 +47,25 @@ def handler(event, context):
         # Hash the password
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         
-        # Save user to DynamoDB
-        table.put_item(
-            Item={
-                'pk': f'USER#{email}',
-                'sk': 'PROFILE',
-                'name': name,
-                'phone': phone,
-                'password': hashed.decode('utf-8')
-            }
-        )
+        # Create user
+        timestamp = datetime.now().isoformat()
+        user = {
+            'pk': f'USER#{email}',
+            'sk': 'PROFILE',
+            'email': email,
+            'password': hashed.decode('utf-8'),
+            'name': name,
+            'phone': phone,
+            'apartment_number': apartment_number,
+            'created_at': timestamp,
+            'updated_at': timestamp
+        }
         
-        return build_response(201, {"message": "User registered successfully"})
+        table.put_item(Item=user)
+        
+        # Remove password from response
+        user.pop('password', None)
+        return build_response(200, {"message": "User created successfully", "user": user})
         
     except json.JSONDecodeError as e:
         logger.error(f"JSON decode error: {e}")
