@@ -70,3 +70,30 @@ Content-Type: application/json
 # @name logout
 POST {{baseUrl}}/auth/logout
 Authorization: Bearer {{authToken}}
+
+### Register Delivery (Porteiro)
+# @name registerDelivery
+POST {{baseUrl}}/deliveries
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "resident_name": "João Silva",
+    "apartment_number": "42A",
+    "description": "Pacote Amazon - 2 volumes"
+}
+
+### Confirm Delivery (Porteiro)
+# @name confirmDelivery
+POST {{baseUrl}}/deliveries/{{deliveryId}}/confirm
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "pickup_code": "ABC123"
+}
+
+### List Deliveries (Morador/Porteiro)
+# @name listDeliveries
+GET {{baseUrl}}/deliveries
+Authorization: Bearer {{authToken}}

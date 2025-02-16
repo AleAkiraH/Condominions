@@ -7,7 +7,8 @@ provider:
   tags:
     projeto: condominions
   environment:
-    DYNAMODB_TABLE: condominions-users
+    DYNAMODB_TABLE_USERS: condominions-users
+    DYNAMODB_TABLE_DELIVERIES: condominions-deliveries
     JWT_SECRET: "seu-secret-temporario-123"
   iamRoleStatements:
     - Effect: Allow
@@ -15,7 +16,10 @@ provider:
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:UpdateItem
-      Resource: !GetAtt UsersTable.Arn
+        - dynamodb:Query
+      Resource: 
+        - !GetAtt UsersTable.Arn
+        - !GetAtt DeliveriesTable.Arn
     - Effect: Allow
       Action:
         - ses:SendEmail
@@ -111,12 +115,36 @@ functions:
           cors: true
           # Remover authorizer: true até implementarmos o autorizador
 
+  registerDelivery:
+    handler: src/deliveries/register_delivery.handler
+    events:
+      - http:
+          path: /deliveries
+          method: post
+          cors: true
+
+  confirmDelivery:
+    handler: src/deliveries/confirm_delivery.handler
+    events:
+      - http:
+          path: /deliveries/{id}/confirm
+          method: post
+          cors: true
+
+  listDeliveries:
+    handler: src/deliveries/list_deliveries.handler
+    events:
+      - http:
+          path: /deliveries
+          method: get
+          cors: true
+
 resources:
   Resources:
     UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_USERS}
         AttributeDefinitions:
           - AttributeName: pk
             AttributeType: S
@@ -143,6 +171,46 @@ resources:
     CloudWatchLogsGroup:
       Type: AWS::Logs::LogGroup
       Properties:
+        Tags:
+          - Key: projeto
+            Value: condominions
+
+    DeliveriesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_DELIVERIES}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: delivery_id
+            AttributeType: S
+          - AttributeName: status
+            AttributeType: S
+          - AttributeName: created_at  # Adicionando definição do created_at
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: DeliveryIdIndex
+            KeySchema:
+              - AttributeName: delivery_id
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: StatusIndex
+            KeySchema:
+              - AttributeName: status
+                KeyType: HASH
+              - AttributeName: created_at
+                KeyType: RANGE
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
         Tags:
           - Key: projeto
             Value: condominions
