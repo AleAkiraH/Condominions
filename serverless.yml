@@ -41,6 +41,8 @@ functions:
           path: /auth/register
           method: post
           cors: true
+    tags:
+      projeto: condominions  # Tag específica para esta função
   
   login:
     handler: src/auth/login.handler
@@ -55,6 +57,8 @@ functions:
           path: /auth/login
           method: post
           cors: true
+    tags:
+      projeto: condominions  # Tag específica para esta função
           
   forgotPassword:
     handler: src/auth/forgot_password.handler
@@ -69,6 +73,8 @@ functions:
           path: /auth/forgot-password
           method: post
           cors: true
+    tags:
+      projeto: condominions  # Tag específica para esta função
 
 resources:
   Resources:
@@ -87,6 +93,21 @@ resources:
           - AttributeName: sk
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+        Tags:
+          - Key: projeto
+            Value: condominions
+
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: ${self:service}-${sls:stage}
+        Tags:
+          - Key: projeto
+            Value: condominions  # Corrigido formato das tags para array
+
+    CloudWatchLogsGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
         Tags:
           - Key: projeto
             Value: condominions
