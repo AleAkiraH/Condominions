@@ -96,18 +96,15 @@ plugins:
 
 custom:
   pythonRequirements:
-    layer: true  # Alterado para true para criar a layer
+    layer: true
     noDeploy:
       - coverage
       - pytest
     usePoetry: false
     useStaticCache: false
-    dockerizePip: false
+    dockerizePip: true  # Habilita o Docker para compilação
     zip: true
     slim: true
     strip: false
-    nativeModules: false
+    nativeModules: true  # Habilita módulos nativos
     pythonBin: python
-  
-  bucketName: minha-aplicacao-serveless
-  requirementsKey: requirements.zip
