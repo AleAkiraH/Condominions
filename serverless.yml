@@ -30,6 +30,8 @@ package:
 functions:
   register:
     handler: src/auth/register.handler
+    layers:
+      - !Ref PythonRequirementsLambdaLayer  # Adiciona referência à layer
     package:
       patterns:
         - 'src/auth/register.py'  # Inclui apenas o arquivo do lambda
@@ -42,6 +44,8 @@ functions:
   
   login:
     handler: src/auth/login.handler
+    layers:
+      - !Ref PythonRequirementsLambdaLayer  # Adiciona referência à layer
     package:
       patterns:
         - 'src/auth/login.py'  # Inclui apenas o arquivo do lambda
@@ -54,6 +58,8 @@ functions:
           
   forgotPassword:
     handler: src/auth/forgot_password.handler
+    layers:
+      - !Ref PythonRequirementsLambdaLayer  # Adiciona referência à layer
     package:
       patterns:
         - 'src/auth/forgot_password.py'  # Inclui apenas o arquivo do lambda
@@ -90,7 +96,7 @@ plugins:
 
 custom:
   pythonRequirements:
-    layer: false
+    layer: true  # Alterado para true para criar a layer
     noDeploy:
       - coverage
       - pytest
@@ -102,3 +108,6 @@ custom:
     strip: false
     nativeModules: false
     pythonBin: python
+  
+  bucketName: minha-aplicacao-serveless
+  requirementsKey: requirements.zip
