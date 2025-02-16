@@ -1,17 +1,17 @@
 @baseUrl = {{$dotenv API_URL}}
 @authToken = {{login.response.body.token}}
 
-### Register
+### Register User
 # @name register
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "email": "user@example.com",
+    "email": "alexsandersf15@gmail.com",
     "password": "Senha@123",
     "name": "Usuario Teste",
-    "phone": "+5511999999",
-    "apartment_number": "42A"  # Novo campo adicionado
+    "phone": "+5511982292454",
+    "apartment_number": "194A"
 }
 
 ### Login
@@ -20,7 +20,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "user@example.com",
+    "email": "alexsandersf15@gmail.com",
     "password": "Senha@123"
 }
 
@@ -30,5 +30,43 @@ POST {{baseUrl}}/auth/forgot-password
 Content-Type: application/json
 
 {
-    "email": "user@example.com"
+    "email": "alexsandersf15@gmail.com"
 }
+
+### Update Profile
+# @name updateProfile
+PUT {{baseUrl}}/auth/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "Alexsander de Souza Ferreira",
+    "phone": "+5511888888",
+    "apartment_number": "43B"
+}
+
+### Change Password
+# @name changePassword
+POST {{baseUrl}}/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "current_password": "Senha@123",
+    "new_password": "NovaSenha@123"
+}
+
+### Reset Password
+# @name resetPassword
+POST {{baseUrl}}/auth/reset-password
+Content-Type: application/json
+
+{
+    "token": "token-recebido-por-email",
+    "new_password": "NovaSenha@123"
+}
+
+### Logout
+# @name logout
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{authToken}}
